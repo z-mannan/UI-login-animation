@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cyberpunk Auth Portal</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Background Layer Grid & Glow Orbs -->
+  <div class="grid-bg"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <!-- Particle Canvas -->
+  <canvas id="particleCanvas"></canvas>
+
+  <!-- Auth Card Center Wrapper -->
+  <div class="card-wrapper" id="cardWrapper">
+    <div class="auth-card">
+
+      <!-- Step 1: Login Form (Standard Email Only) -->
+      <div class="form-step active" id="loginStep">
+        <h2>Sign In</h2>
+        <p class="subtitle">Enter your credentials to access account</p>
+
+        <form onsubmit="handleLogin(event)">
+          <div class="input-group">
+            <label class="input-label">Email Address</label>
+            <input type="email" id="loginInput" placeholder="name@example.com" required />
+          </div>
+
+          <div class="input-group">
+            <label class="input-label">Password</label>
+            <input type="password" id="loginPassword" placeholder="••••••••" required />
+            <button type="button" class="eye-toggle-btn" onclick="togglePasswordVisibility('loginPassword', this)">
+              <svg class="eye-svg" viewBox="0 0 24 24">
+                <path class="eye-lid" d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle class="pupil" cx="12" cy="12" r="3"></circle>
+              </svg>
+            </button>
+          </div>
+
+          <button type="submit" class="btn">Sign In</button>
+        </form>
+
+        <p class="toggle-text">
+          Don't have an account? <span onclick="switchStep('signupStep')">Sign Up</span>
+        </p>
+      </div>
+
+      <!-- Step 2: Signup Form (Email & Phone Tabs Included) -->
+      <div class="form-step" id="signupStep">
+        <h2>Create Account</h2>
+        <p class="subtitle">Join the platform in a few simple steps</p>
+
+        <!-- Toggle Switch (Email / Phone for Sign Up) -->
+        <div class="auth-mode-toggle">
+          <button type="button" class="mode-btn active" onclick="setAuthMode('signup', 'email', this)">Email</button>
+          <button type="button" class="mode-btn" onclick="setAuthMode('signup', 'phone', this)">Phone Number</button>
+        </div>
+
+        <form onsubmit="handleSignup(event)">
+          <div class="input-group">
+            <label class="input-label">Full Name</label>
+            <input type="text" placeholder="John Doe" required />
+          </div>
+
+          <div class="input-group">
+            <label class="input-label" id="signupInputLabel">Email Address</label>
+            <input type="email" id="signupInput" placeholder="name@example.com" required />
+          </div>
+
+          <div class="input-group">
+            <label class="input-label">Password</label>
+            <input type="password" id="signupPassword" placeholder="••••••••" required />
+            <button type="button" class="eye-toggle-btn" onclick="togglePasswordVisibility('signupPassword', this)">
+              <svg class="eye-svg" viewBox="0 0 24 24">
+                <path class="eye-lid" d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle class="pupil" cx="12" cy="12" r="3"></circle>
+              </svg>
+            </button>
+          </div>
+
+          <button type="submit" class="btn">Continue</button>
+        </form>
+
+        <p class="toggle-text">
+          Already have an account? <span onclick="switchStep('loginStep')">Sign In</span>
+        </p>
+      </div>
+
+      <!-- Step 3: Square Dynamic OTP Verification Step -->
+      <div class="form-step" id="verifyStep">
+        <h2>OTP Verification</h2>
+        <p class="subtitle">We've sent a 4-digit code. It'll auto-verify or press Enter.</p>
+
+        <form class="verify-step-form" id="verifyStepForm" onsubmit="handleVerifySubmit(event)">
+          <div class="otp-inputs" id="otpContainer">
+            <input type="text" class="otp-field" maxlength="1" pattern="[0-9]" inputmode="numeric" required />
+            <input type="text" class="otp-field" maxlength="1" pattern="[0-9]" inputmode="numeric" required />
+            <input type="text" class="otp-field" maxlength="1" pattern="[0-9]" inputmode="numeric" required />
+            <input type="text" class="otp-field" maxlength="1" pattern="[0-9]" inputmode="numeric" required />
+          </div>
+
+          <p id="codeError" class="error-msg">Invalid Code. Demo code is 4555</p>
+          <button type="submit" class="btn" style="margin-top: 15px;">Verify Code</button>
+        </form>
+
+        <p class="toggle-text">
+          Didn't receive the code? <span onclick="switchStep('signupStep')">Resend</span>
+        </p>
+      </div>
+
+      <!-- Success Verification Overlay Screen -->
+      <div class="status-screen" id="statusScreen">
+        <svg class="verify-svg" viewBox="0 0 52 52">
+          <path fill="none" d="M14 27 l10 10 l20 -20"></path>
+        </svg>
+        <h3 class="verified-title">Verification Successful</h3>
+        <p class="subtitle">Access clearance granted</p>
+      </div>
+
+      <!-- Loader State -->
+      <div class="loader-box" id="loaderBox">
+        <div class="scanner-wrapper">
+          <div class="radar-ring" id="radar1"></div>
+          <div class="radar-ring-2" id="radar2"></div>
+          <div class="scanner-core" id="scannerCore"></div>
+          <svg class="checkmark-icon" id="svgCheck" viewBox="0 0 52 52">
+            <path fill="none" d="M14 27 l10 10 l20 -20" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h2 class="status-text" id="statusText">Verifying Code...</h2>
+        <p class="subtitle" id="statusSub">Scanning encrypted key packet</p>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
