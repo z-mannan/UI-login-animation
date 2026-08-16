@@ -76,24 +76,24 @@ function switchStep(stepId) {
   }
 }
 
-// --- BUTTON WHITE BORDER LOOP & REDIRECT LOGIC ---
+
 
 async function handleLogin(e) {
   e.preventDefault();
   const btn = e.target.querySelector('button[type="submit"]');
   const originalText = btn.innerText;
 
-  // Start White Line Border Loop Animation
+
   btn.classList.add('loading-border');
   btn.innerText = "Signing In...";
 
-  // 2.5 Seconds Border Loop Delay
+
   await new Promise(resolve => setTimeout(resolve, 2500));
 
   btn.classList.remove('loading-border');
   btn.innerText = originalText;
 
-  // Move to next step or dashboard
+
   triggerDelayedVerification("Access Granted!", "Welcome back to your dashboard");
 }
 
@@ -102,21 +102,21 @@ async function handleSignup(e) {
   const btn = e.target.querySelector('button[type="submit"]');
   const originalText = btn.innerText;
 
-  // Start White Line Border Loop Animation
+
   btn.classList.add('loading-border');
   btn.innerText = "Processing...";
 
-  // 2.5 Seconds Border Loop Delay
+
   await new Promise(resolve => setTimeout(resolve, 2500));
 
   btn.classList.remove('loading-border');
   btn.innerText = originalText;
 
-  // Move to Verification step
+
   switchStep('verifyStep');
 }
 
-// OTP Auto Focus Logic
+
 const otpInputsContainer = document.getElementById('otpContainer');
 const otpFields = document.querySelectorAll('.otp-field');
 const statusScreen = document.getElementById('statusScreen');
@@ -135,7 +135,7 @@ otpFields.forEach((field, index) => {
   });
 });
 
-// Dynamic Square Rotation & Verification Handler (5.5 Seconds)
+
 async function handleVerifySubmit(e) {
   e.preventDefault();
   
@@ -152,14 +152,14 @@ async function handleVerifySubmit(e) {
 
   if (errorMsg) errorMsg.style.display = 'none';
 
-  // Step 1: Add 2x2 Grid arrangement & start spin animation
+  
   otpInputsContainer.classList.add('dynamic-format');
   otpFields.forEach(field => field.classList.add('dynamic-spin'));
 
-  // Step 2: Continuous Rotation for 5.5 Seconds
+ 
   await new Promise(resolve => setTimeout(resolve, 5500));
 
-  // Step 3: Validate Code
+
   if (enteredCode === FIXED_CODE) {
     document.getElementById('verifyStepForm').style.display = 'none';
     if (statusScreen) statusScreen.classList.add('active');
