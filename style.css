@@ -299,7 +299,7 @@ p.subtitle {
   box-shadow: 0 12px 30px rgba(255, 42, 117, 0.6);
 }
 
-/* White Line Border Loop State */
+
 .btn.loading-border {
   pointer-events: none;
   background: rgba(15, 10, 30, 0.95) !important;
@@ -309,7 +309,7 @@ p.subtitle {
   box-shadow: 0 0 25px rgba(255, 255, 255, 0.2);
 }
 
-/* Rotating White Light Beam */
+
 .btn.loading-border::before {
   content: '';
   position: absolute;
@@ -327,7 +327,7 @@ p.subtitle {
   z-index: -2;
 }
 
-/* Inner Background Mask to make it look like a thin border line */
+
 .btn.loading-border::after {
   content: '';
   position: absolute;
